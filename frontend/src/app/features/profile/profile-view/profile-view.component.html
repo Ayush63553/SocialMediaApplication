@@ -1,0 +1,137 @@
+<div class="container my-4">
+
+  <div class="profile-card">
+    
+    <!-- Settings Icon -->
+    <div class="profile-settings" routerLink="/profile/edit">
+      ✏️
+    </div>
+
+    <!-- Create Post Icon -->
+    <div class="profile-create-post" routerLink="/profile/upload">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M12 5v14m-7-7h14" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <!-- Profile Background -->
+    <div class="profile-background"></div>
+
+    <!-- Profile Info -->
+    <div class="profile-info-container">
+      <div class="profile-avatar">
+        <img [src]="user.avatar" class="avatar-img shadow" alt="Avatar">
+      </div>
+      <div class="profile-details">
+        <h2 class="user-name">{{ user.name }} <span class="user-age">{{ user.age }}</span></h2>
+        <p class="user-location">{{ user.location }}</p>
+        <p class="user-profession">{{ user.profession }}</p>
+        <p class="user-education">{{ user.education }}</p>
+        <p class="user-bio">{{ user.bio }}</p>
+      </div>
+      <div class="profile-stats">
+        <div class="stat-item">
+          <h4>{{ user.friends }}</h4>
+          <p>Friends</p>
+        </div>
+        <div class="stat-item">
+          <h4>{{ postCount }}</h4>
+          <p>Photos</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Posts -->
+  <h3 class="mb-3">My Posts</h3>
+
+  <div class="row row-cols-1 row-cols-md-2 g-3 align-items-start">
+    <div *ngFor="let p of posts" class="col">
+      <div class="card  shadow-sm">
+        <div class="text-end text-muted small">{{p.createdAt | date:'dd MMM yyyy, hh:mm a' }}</div>
+        <div class="card-body d-flex flex-column">
+
+          <!-- Post text -->
+          <p>{{ p.content }}</p>
+
+          <!-- Post Media (image or video) -->
+          <div *ngIf="p.mediaUrl" class="mb-3">
+            <!-- Image -->
+            <img *ngIf="p.mediaType?.startsWith('image')" 
+                 [src]="p.mediaUrl" 
+                 class="img-fluid rounded shadow-sm" 
+                 alt="Post Image">
+            
+            <!-- Video -->
+            <video *ngIf="p.mediaType?.startsWith('video')" 
+                   [src]="p.mediaUrl" 
+                   class="w-100 rounded shadow-sm" 
+                   controls>
+            </video>
+          </div>
+
+          <div class="mt-auto d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+            <!-- Likes -->
+            <div class="d-flex gap-2">
+              <button class="btn-custom btn-post-like" (click)="toggleLikes(p)">
+                👍 Likes ({{ p.likedUsers?.length || 0 }})
+              </button>
+
+              <!-- Likes box -->
+              
+
+              <!-- Comments -->
+              <button class="btn-custom btn-post-comment" (click)="viewComments(p)">
+                💬 {{ p.showComments ? 'Hide' : 'View' }} Comments ({{ p.comments?.length || 0 }})
+              </button>
+            </div>
+
+            <!-- Edit / Delete -->
+            <div class="d-flex gap-1">
+              <button class="btn-custom btn-post-edit" [routerLink]="['/profile/upload', p.postId]" title="Edit Post">✏️</button>
+              <button class="btn-custom btn-post-delete" (click)="deletePost(p.postId)" title="Delete Post">🗑</button>
+            </div>
+          </div>
+          <div *ngIf="p.showLikes" class="likes-box mt-2">
+                <h6>Liked By</h6>
+                <ul *ngIf="p.likedUsers?.length > 0; else noLikes">
+                  <li *ngFor="let name of p.likedUsers">{{ name }}</li>
+                </ul>
+                <ng-template #noLikes>
+                  <p>No Likes yet</p>
+                </ng-template>
+              </div>
+
+          <!-- Comment List -->
+          <div *ngIf="p.showComments" class="mt-3 border-top pt-2 post-comments">
+            <div *ngIf="p.comments?.length > 0; else noComments">
+              <div *ngFor="let c of p.comments" class="mb-1">
+                <div class="text-end text-muted small">{{c.createdAt | date:'dd MMM yyyy, hh:mm a' }}</div>
+                <p><b>{{ c.authorName }}:</b> {{ c.text }}</p>
+              </div>
+            </div>
+            <ng-template #noComments>
+              <p>No Comments yet</p>
+            </ng-template>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Toast -->
+<div class="toast-container position-fixed top-0 end-0 p-3" *ngIf="showToast">
+  <div class="toast align-items-center border-0 show"
+       [ngClass]="{
+         'text-bg-success': toastType === 'success',
+         'text-bg-danger': toastType === 'error',
+         'text-bg-info': toastType === 'info'
+       }">
+    <div class="d-flex">
+      <div class="toast-body">{{ toastMessage }}</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" (click)="showToast = false"></button>
+    </div>
+  </div>
+</div>

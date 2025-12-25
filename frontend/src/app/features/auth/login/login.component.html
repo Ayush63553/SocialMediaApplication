@@ -1,0 +1,50 @@
+<div class="auth-container">
+  <div class="branding-section">
+    <h1 class="text-primary display-2 text-start"><b>Connecto</b></h1>
+    <h5>Weaving the world together</h5>
+  </div>
+  <div>
+    <div class="form-section">
+      <div class="form-container">
+        <h3><b>Log in to Connecto</b></h3>
+        <br />
+        <form class="form" (ngSubmit)="login()">
+          <div class="auth-box">
+            <div>
+              <input class="form-control" type="text" placeholder="username"
+                [(ngModel)]="credentails.username" name="username"/>
+            </div>
+            <div>
+              <input class="form-control" type="password" placeholder="Password"
+                [(ngModel)]="credentails.password" name="password"/>
+            </div>
+            <button type="submit">Log In</button>
+          </div>
+          <a routerLink="/auth/forgot-password" class="forgot-link">Forgot Password?</a>
+          <hr />
+          <button routerLink="/auth/register" class="create-btn">Create new account</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Beautiful Toaster -->
+<div 
+  class="toast-container position-fixed top-0 end-0 p-3"
+  *ngIf="showToast">
+  <div 
+    class="toast align-items-center border-0 text-white show"
+    [ngClass]="toastType === 'success' ? 'bg-success' : 'bg-danger'">
+    <div class="d-flex">
+      <div class="toast-body">
+        {{ toastMessage }}
+      </div>
+      <button 
+        type="button" 
+        class="btn-close btn-close-white me-2 m-auto" 
+        (click)="showToast = false">
+      </button>
+    </div>
+  </div>
+</div>

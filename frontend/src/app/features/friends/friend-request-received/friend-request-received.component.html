@@ -1,0 +1,108 @@
+<div class="container mt-4">
+
+  <h3 class="fw-bold mb-4">
+    <i class="bi bi-person-check-fill text-success me-2"></i> Friend Requests Received
+  </h3>
+
+  <!-- Search -->
+  <div class="input-group mb-4 shadow-sm">
+    <span class="input-group-text bg-white border-end-0">
+      <i class="bi bi-search text-muted"></i>
+    </span>
+    <input
+      type="text"
+      class="form-control border-start-0"
+      placeholder="Search for received requests..."
+      [(ngModel)]="searchText"
+      (input)="onSearchChange()"
+    />
+  </div>
+
+  <!-- Requests -->
+  <div *ngIf="requests.length > 0; else elseBlock">
+    <div *ngFor="let req of requests" class="card mb-3 shadow-sm request-card">
+      <div class="card-body d-flex align-items-center justify-content-between">
+
+        <!-- User info -->
+        <div class="d-flex align-items-center">
+          <img
+            [src]="req.sender.profilePictureUrl || 'assets/default-avatar.png'"
+            width="55"
+            height="55"
+            class="rounded-circle border me-3 shadow-sm"
+          />
+          <div>
+            <h6 class="mb-0 fw-semibold">{{ req.sender.username }}</h6>
+            <small class="text-muted">Sent you a request</small>
+          </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div>
+          <button class="btn btn-sm btn-outline-primary me-2" (click)="viewProfile(req.sender)">
+            <i class="bi bi-person"></i> View
+          </button>
+          <button class="btn btn-sm btn-success me-2" (click)="accept(req.sender.userId)">
+            <i class="bi bi-check-circle"></i> Accept
+          </button>
+          <button class="btn btn-sm btn-outline-danger" (click)="reject(req.sender.userId)">
+            <i class="bi bi-x-circle"></i> Reject
+          </button>
+        </div>
+      </div>
+
+      <!-- Mutual friends -->
+      <div
+        class="card-footer bg-light border-0 text-center"
+        *ngIf="mutualFriendsMap[req.sender.userId] && mutualFriendsMap[req.sender.userId].length > 0"
+      >
+        <small
+          class="text-primary fw-semibold cursor-pointer"
+          (click)="toggleDropdown(req.sender.userId)"
+        >
+          {{ expanded[req.sender.userId] ? 'Hide Mutual Friends 🔼' : 'Show Mutual Friends 🔽' }}
+          <span class="badge bg-secondary ms-1">{{ mutualFriendsMap[req.sender.userId].length }}</span>
+        </small>
+
+        <!-- Expanded list -->
+        <ul *ngIf="expanded[req.sender.userId]" class="list-group list-group-flush mt-3">
+          <li *ngFor="let mf of mutualFriendsMap[req.sender.userId]" class="list-group-item d-flex align-items-center">
+            <img
+              [src]="mf.profilePictureUrl || 'assets/default-avatar.png'"
+              class="rounded-circle border me-3"
+              width="40"
+              height="40"
+            />
+            <span class="fw-semibold">{{ mf.username }}</span>
+            <button class="btn btn-sm btn-outline-secondary ms-auto" (click)="viewProfile(mf)">
+              View Profile
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- No requests -->
+  <ng-template #elseBlock>
+    <p class="text-muted text-center mt-4">
+      <i class="bi bi-emoji-frown fs-3"></i><br />
+      No friend requests found.
+    </p>
+  </ng-template>
+    <!-- Toast -->
+  <div class="toast-container position-fixed top-0 end-0 p-3" *ngIf="showToast">
+    <div class="toast align-items-center border-0 show"
+         [ngClass]="{
+           'text-bg-success': toastType === 'success',
+           'text-bg-danger': toastType === 'error',
+           'text-bg-info': toastType === 'info'
+         }">
+      <div class="d-flex">
+        <div class="toast-body">{{ toastMessage }}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                (click)="showToast = false"></button>
+      </div>
+    </div>
+  </div>
+</div>

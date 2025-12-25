@@ -1,0 +1,302 @@
+/* ===== Global ===== */
+body {
+  background: linear-gradient(135deg, #f3f4f9, #e8ecf3); /* subtle gradient */
+  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+  color: #222;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* ===== Profile Card ===== */
+.profile-card {
+  background: linear-gradient(135deg, #f3f4f9, #e8ecf3);
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  overflow: hidden;
+  padding: 30px;
+  margin-bottom: 25px;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+}
+
+/* ===== Avatar Left ===== */
+.profile-avatar {
+  flex-shrink: 0;
+}
+.profile-avatar img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* ===== User Details (beside photo) ===== */
+.profile-info-container {
+  margin-left: 20px;
+  text-align: left;
+  flex-grow: 1;
+}
+.profile-details h2 {
+  margin-top: 20px;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #222;
+}
+.user-age {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #777;
+  margin-left: 6px;
+}
+.user-location {
+  color: #555;
+  font-size: 14px;
+  margin-top: 5px;
+}
+.user-profession,
+.user-education {
+  color: #333;
+  font-style: italic;
+  margin: 3px 0;
+}
+.user-bio {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #444;
+  max-width: 600px;
+}
+
+/* ===== Floating Action Buttons ===== */
+.profile-settings,
+.profile-create-post {
+  position: absolute;
+  top: 15px;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+/* --- Edit Profile Button (✏️) --- */
+.profile-settings {
+  right: 15px;
+  background: #f0f0f0;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.profile-settings::after {
+  content: "Edit";
+  position: absolute;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  background: #333;
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  opacity: 0;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.profile-settings:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* --- Create Post Button (SVG plus) --- */
+.profile-create-post {
+  right: 65px;
+  background: #ff6b35;
+}
+.profile-create-post svg {
+  width: 22px;
+  height: 22px;
+  fill: #fff;
+}
+.profile-create-post::after {
+  content: "Upload";
+  position: absolute;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  background: #333;
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  opacity: 0;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.profile-create-post:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Hover Animation */
+.profile-settings:hover,
+.profile-create-post:hover {
+  transform: scale(1.1);
+}
+
+/* ===== Stats Section ===== */
+.profile-stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin: 20px 0;
+}
+.stat-item {
+  flex: 1;
+  background: linear-gradient(135deg, #fafafa, #f1f1f1);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+.stat-item:hover {
+  transform: translateY(-3px);
+}
+.stat-item h4 {
+  font-size: 1.3rem;
+  margin: 0;
+  font-weight: bold;
+  color: #222;
+}
+.stat-item p {
+  margin: 5px 0 0;
+  font-size: 13px;
+  color: #666;
+}
+
+/* ===== Section Title ===== */
+h3 {
+  margin: 25px 0 15px;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #222;
+  border-left: 4px solid #ff6b35;
+  padding-left: 10px;
+}
+
+/* ===== Post Cards ===== */
+.card {
+  border-radius: 15px;
+  border: none;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+  height: auto;
+  min-height: 400px;
+}
+.card:hover {
+  transform: translateY(-5px);
+}
+.card-body {
+  font-size: 15px;
+  color: #333;
+}
+.card img{
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.card video{
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* ===== Buttons ===== */
+.btn-custom {
+  border: none;
+  border-radius: 25px;
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.btn-custom:hover {
+  transform: translateY(-2px);
+}
+.btn-post-like {
+  background: #5a67d8;
+  color: #fff;
+}
+.btn-post-comment {
+  background: #319795;
+  color: #fff;
+}
+.btn-post-edit {
+  background: rgba(0, 0, 0, 0.39);
+  color: #fff;
+  padding: 6px 12px;
+}
+.btn-post-delete {
+  background: rgba(255, 0, 0, 0.842);
+  color: #fff;
+  padding: 6px 12px;
+}
+
+/* ===== Likes & Comments Box ===== */
+.likes-box,
+.post-comments {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 10px 14px;
+  max-height: 150px;
+  overflow-y: auto;
+  margin-top: 10px;
+  font-size: 14px;
+}
+.likes-box h6 {
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #333;
+  font-weight: 600;
+}
+.likes-box li {
+  font-size: 13px;
+  padding: 3px 0;
+  border-bottom: 1px solid #eee;
+}
+.post-comments p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .profile-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  .profile-info-container {
+    margin-left: 0;
+    margin-top: 15px;
+  }
+  .profile-stats {
+    flex-direction: column;
+  }
+}

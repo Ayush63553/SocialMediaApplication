@@ -1,0 +1,119 @@
+<div class="container mt-4">
+  <div class="card shadow-sm rounded-3 border-0">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">🔍 Find Friends</h4>
+    </div>
+    <div class="card-body">
+      <!-- Search -->
+      <div class="mb-3">
+        <input
+          type="text"
+          class="form-control form-control-lg"
+          placeholder="Search for friends..."
+          [(ngModel)]="searchText"
+          (input)="onSearchChange()"
+        />
+      </div>
+
+      <!-- Friends List -->
+      <div *ngIf="filteredFriends.length > 0; else noResults">
+        <ul class="list-group">
+          <li
+            *ngFor="let friend of filteredFriends"
+            class="list-group-item py-3 d-flex flex-column"
+          >
+            <div class="d-flex justify-content-between align-items-center">
+              <!-- Profile -->
+              <div class="d-flex align-items-center">
+                <img
+                  [src]="friend.profilePictureUrl || 'assets/default-avatar.png'"
+                  class="rounded-circle shadow-sm me-3 border"
+                  width="50"
+                  height="50"
+                />
+                <div>
+                  <h6 class="mb-0 fw-bold">{{ friend.username }}</h6>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div>
+                <button
+                  class="btn btn-outline-primary btn-sm me-2"
+                  (click)="viewProfile(friend)"
+                >
+                  <i class="bi bi-person"></i> View Profile
+                </button>
+                <button
+                  class="btn btn-success btn-sm"
+                  (click)="sendRequest(friend)"
+                >
+                  <i class="bi bi-person-plus"></i> Add Friend
+                </button>
+              </div>
+            </div>
+
+            <!-- Mutual Friends -->
+            <div
+              *ngIf="mutualFriendsMap[friend.userId] && mutualFriendsMap[friend.userId].length > 0"
+              class="mt-2"
+            >
+              <small
+                class="text-primary fw-semibold cursor-pointer"
+                (click)="toggleDropdown(friend.userId)"
+              >
+                {{ expanded[friend.userId] ? "Hide" : "Show" }} Mutual Friends
+                ({{ mutualFriendsMap[friend.userId].length }})
+                <i
+                  class="bi"
+                  [ngClass]="expanded[friend.userId] ? 'bi-chevron-up ms-1' : 'bi-chevron-down ms-1'"
+                ></i>
+              </small>
+
+              <ul *ngIf="expanded[friend.userId]" class="list-group list-group-flush mt-2 ms-4">
+                <li *ngFor="let mf of mutualFriendsMap[friend.userId]" class="list-group-item py-2 d-flex align-items-center">
+                  <img
+                    [src]="mf.profilePictureUrl || 'assets/default-avatar.png'"
+                    class="rounded-circle shadow-sm me-2"
+                    width="35"
+                    height="35"
+                  />
+                  <span>{{ mf.username }}</span>
+                  <button
+                    class="btn btn-sm btn-outline-secondary ms-3"
+                    (click)="viewProfile(mf)"
+                  >
+                    View Profile
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- No results -->
+      <ng-template #noResults>
+        <p class="text-muted text-center mt-3">
+          <i class="bi bi-emoji-frown"></i> No friends found.
+        </p>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast-container position-fixed top-0 end-0 p-3" *ngIf="showToast">
+    <div class="toast align-items-center border-0 show"
+         [ngClass]="{
+           'text-bg-success': toastType === 'success',
+           'text-bg-danger': toastType === 'error',
+           'text-bg-info': toastType === 'info'
+         }">
+      <div class="d-flex">
+        <div class="toast-body">{{ toastMessage }}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                (click)="showToast = false"></button>
+      </div>
+    </div>
+  </div>
+</div>

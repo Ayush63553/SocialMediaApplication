@@ -1,0 +1,18 @@
+/* You can add global styles to this file, and also import other style files */
+
+@font-face{
+    font-family: "Oswald";
+    src: url(./assets/Oswald/Oswald-VariableFont_wght.ttf) format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url(./assets/Rubik/Rubik-VariableFont_wght.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Oswald, Rubik, Roboto, "Helvetica Neue", sans-serif; }

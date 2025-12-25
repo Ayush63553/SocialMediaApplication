@@ -1,0 +1,38 @@
+.card {
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+input.form-control {
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 1rem;
+}
+
+.list-group-item {
+  border: none;
+  border-bottom: 1px solid #f1f1f1;
+  transition: background 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.list-group-item:hover {
+  background: #f9fafb;
+  transform: scale(1.01);
+}
+
+img {
+  object-fit: cover;
+  border: 2px solid #eee;
+}
+
+button.btn {
+  border-radius: 20px;
+  font-size: 0.85rem;
+  padding: 5px 12px;
+  transition: 0.2s;
+}
+
+button.btn:hover {
+  transform: translateY(-1px);
+}

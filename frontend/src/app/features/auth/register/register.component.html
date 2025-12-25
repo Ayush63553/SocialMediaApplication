@@ -1,0 +1,204 @@
+<div class="outer-box">
+ <div class="register-container">
+   <!-- Branding (Left Side) -->
+   <div class="branding-section">
+     <h1><b>Connecto</b></h1>
+     <h5>Weaving the world together</h5>
+   </div>
+
+   <!-- Register Form (Right Side) -->
+   <div class="register-form-card">
+     <h3>Create a new account</h3>
+     <hr />
+
+     <form class="register-form" #registerForm="ngForm" (ngSubmit)="onRegister()">
+
+       <!-- First / Last Name -->
+       <div class="name-fields">
+         <div class="form-group">
+           <input class="form-control"
+                  type="text"
+                  placeholder="First name"
+                  [(ngModel)]="firstName"
+                  name="firstName"
+                  required
+                  pattern="^([A-Z][a-z]+)$"
+                  #fname="ngModel"/>
+           <small class="text-danger" *ngIf="fname.errors?.['pattern'] && fname.dirty">
+             First name is required (Eg. Rahul...)
+           </small>
+         </div>
+
+         <div class="form-group">
+           <input class="form-control"
+                  type="text"
+                  placeholder="Surname"
+                  [(ngModel)]="surname"
+                  name="surname"
+                  required
+                  pattern="^([A-Z][a-z]+)( [A-Z][a-z]+)*$"
+                  #lname="ngModel"/>
+           <small class="text-danger" *ngIf="lname.errors?.['pattern'] && lname.dirty">
+             Surname is required (Eg. Singh....)
+           </small>
+         </div>
+       </div>
+
+       <!-- DOB -->
+       <div class="dob-section">
+         <label>Date of birth</label>
+         <div class="dob-selectors">
+           <select class="form-control-inline" [(ngModel)]="day" name="day" required>
+             <option value="" disabled selected>Day</option>
+             <option *ngFor="let d of days" [value]="d">{{ d }}</option>
+           </select>
+           <select class="form-control-inline" [(ngModel)]="month" name="month" required>
+             <option value="" disabled selected>Month</option>
+             <option *ngFor="let m of months" [value]="m.value">{{ m.name }}</option>
+           </select>
+           <select class="form-control-inline" [(ngModel)]="year" name="year" required>
+             <option value="" disabled selected>Year</option>
+             <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+           </select>
+         </div>
+         <div *ngIf = "dobError" class="text-danger mt-2">
+          You must be at least 13 years old to register.
+         </div>
+       </div>
+
+       <!-- Gender -->
+       <div class="gender-section">
+         <label>Gender</label>
+         <div class="gender-options">
+           <input type="radio" id="female" [(ngModel)]="gender" name="gender" value="Female" required />
+           <label for="female">Female</label>
+           <input type="radio" id="male" [(ngModel)]="gender" name="gender" value="Male" />
+           <label for="male">Male</label>
+           <input type="radio" id="other" [(ngModel)]="gender" name="gender" value="Other" />
+           <label for="other">Other</label>
+         </div>
+       </div>
+
+       <!-- Contact -->
+       <div class="form-group">
+         <input class="form-control"
+                type="tel"
+                placeholder="Mobile number"
+                [(ngModel)]="contact"
+                name="contact"
+                pattern="^[0-9]{10}$"
+                required
+                #contactField="ngModel"/>
+         <small class="text-danger" *ngIf="contactField.errors?.['pattern'] && contactField.dirty">
+           Enter a valid 10-digit mobile number
+         </small>
+       </div>
+
+       <!-- Email -->
+       <div class="form-group">
+         <input class="form-control"
+                type="email"
+                placeholder="Email address"
+                [(ngModel)]="email"
+                name="email"
+                required
+                pattern="^([A-Za-z][A-Za-z0-9._]+)[@](gmail|infosys|yahoo)[.](com|in|org)$"
+                #emailField="ngModel"/>
+         <small class="text-danger" *ngIf="emailField.errors?.['pattern'] && emailField.dirty">
+           Enter a valid email address
+         </small>
+       </div>
+
+       <!-- Username -->
+       <div class="form-group">
+         <input class="form-control"
+                type="text"
+                placeholder="Username"
+                [(ngModel)]="username"
+                name="username"
+                required
+                minlength="4"
+                #uname="ngModel"/>
+         <small class="text-danger" *ngIf="uname.invalid && uname.dirty">
+           Username must be at least 4 characters
+         </small>
+       </div>
+
+       <!-- Password -->
+       <div class="form-group">
+         <input class="form-control"
+                type="password"
+                placeholder="New Password"
+                [(ngModel)]="password"
+                name="password"
+                required
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$"
+                #pass="ngModel"/>
+         <small class="text-danger" *ngIf="pass.errors?.['pattern'] && pass.dirty">
+           Password must contain at least one lowercase, one uppercase, one digit, one special character and length should be more than 7 and less than 17. 
+         </small>
+       </div>
+
+       <!-- Confirm Password -->
+       <div class="form-group">
+         <input class="form-control"
+                type="password"
+                placeholder="Confirm Password"
+                [(ngModel)]="confirmPassword"
+                name="confirmPassword"
+                required
+                #cpass="ngModel"/>
+         <small class="text-danger" *ngIf="confirmPassword && confirmPassword !== password && cpass.dirty">
+           Passwords do not match
+         </small>
+       </div>
+
+       <!-- Security Question -->
+       <div class="security-question-section">
+         <label>Security Question</label>
+         <select class="form-control" [(ngModel)]="securityQuestion" name="securityQuestion" required>
+           <option value="" disabled>Select a question</option>
+           <option value="What is your first pet's name?">What is your first pet's name?</option>
+           <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+           <option value="What was your first school?">What was your first school?</option>
+           <option value="What is your favorite color?">What is your favorite color?</option>
+         </select>
+         <input class="form-control mt-2"
+                type="text"
+                placeholder="Your Answer"
+                [(ngModel)]="securityAnswer"
+                name="securityAnswer"
+                required
+                #secAns="ngModel"/>
+         <small class="text-danger" *ngIf="secAns.invalid && secAns.touched">
+           Please provide an answer
+         </small>
+       </div>
+
+       <!-- Submit -->
+       <button type="submit"
+               class="sign-up-btn"
+               [disabled]="registerForm.invalid || confirmPassword !== password">
+         Sign Up
+       </button>
+     </form>
+
+     <a routerLink="/auth" class="back-to-login">Already have an account?</a>
+   </div>
+ </div>
+</div>
+<!-- Bootstrap Toast -->
+<div class="toast-container position-fixed top-0 end-0 p-3" *ngIf="showToast">
+  <div class="toast align-items-center border-0 show"
+       [ngClass]="{
+         'text-bg-success': toastType === 'success',
+         'text-bg-danger': toastType === 'error',
+         'text-bg-info': toastType === 'info'
+       }">
+    <div class="d-flex">
+      <div class="toast-body">{{ toastMessage }}</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto"
+              (click)="showToast = false"></button>
+    </div>
+  </div>
+</div>

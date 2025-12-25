@@ -1,0 +1,35 @@
+.request-card {
+  border-radius: 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.request-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+img {
+  object-fit: cover;
+}
+
+button.btn {
+  border-radius: 20px;
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  transition: all 0.2s ease;
+}
+button.btn:hover {
+  transform: translateY(-1px);
+}
+
+.card-footer {
+    cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.list-group-item {
+  border: none;
+  border-bottom: 1px solid #f1f1f1;
+}
+.list-group-item:last-child {
+  border-bottom: none;
+}

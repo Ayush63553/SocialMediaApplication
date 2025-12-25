@@ -1,0 +1,8 @@
+*{
+    font-family: 'Rubik', sans-serif;
+}
+.feed {
+    max-width: 600px;
+    margin: auto;
+    margin-top: 20px;
+}

@@ -1,0 +1,173 @@
+<div class="container mt-4" *ngIf="!loading; else loadingTpl">
+  <div *ngIf="profileCheck; else elseBlock">
+    <div class="card shadow-sm profile-card">
+      
+      <!-- Action Buttons -->
+      <div class="mt-3 me-3 text-end">
+        <!--Blocked-->
+        <button *ngIf="isBlocked" class="btn btn-warning btn-sm me-2" (click)="unblockUser()">
+          <i class="bi bi-unlock"></i> Unblock User
+        </button>
+
+        <!--Block button-->
+        <button *ngIf="!isBlocked" class="btn btn-danger btn-sm me-2" (click)="blockUser()">
+          <i class="bi bi-lock"></i> Block User
+        </button>
+
+        <!-- Not Friends -->
+        <button *ngIf="profile.relationshipStatus === 'NOT_FRIEND' && !isBlocked" class="btn btn-primary btn-sm me-2" (click)="addFriend()">
+          <i class="bi bi-person-plus"></i> Add Friend
+        </button>
+
+        <!-- Already Friends -->
+        <button *ngIf="profile.relationshipStatus === 'FRIEND' && !isBlocked" class="btn btn-danger btn-sm me-2" (click)="unfriend()">
+          <i class="bi bi-person-dash"></i> Unfriend
+        </button>
+
+        <!-- Request Sent -->
+        <div *ngIf="profile.relationshipStatus === 'REQUEST_SENT' && !isBlocked" class="d-inline-block">
+          <button class="btn btn-outline-secondary btn-sm me-2" disabled>
+            <i class="bi bi-hourglass-split"></i> Request Sent
+          </button>
+          <button class="btn btn-outline-danger btn-sm" (click)="cancelRequest()">
+            <i class="bi bi-x-circle"></i> Cancel Request
+          </button>
+        </div>
+
+        <!-- Request Received -->
+        <div *ngIf="profile.relationshipStatus === 'REQUEST_RECEIVED' && !isBlocked" class="d-inline-block">
+          <button class="btn btn-success btn-sm me-2" (click)="acceptRequest()">
+            <i class="bi bi-check-circle"></i> Accept
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="rejectRequest()">
+            <i class="bi bi-x-circle"></i> Reject
+          </button>
+        </div>
+      </div>
+      
+
+      <!-- Profile Body -->
+      <div class="card-body d-flex align-items-center">
+        <img [src]="profile.profilePictureUrl || 'assets/default-avatar.png'" 
+            class="rounded-circle border shadow-sm me-3" 
+            width="90" height="90" />
+
+        <div>
+          <h4 class="fw-bold mb-1">{{ profile.firstName }}</h4>
+          <p class="text-muted mb-2">@{{ profile.username }}</p>
+          <p class="mb-2">{{ profile.bio }}</p>
+
+          <!-- Mutual Friends -->
+          <div *ngIf="mutualFriends && mutualFriends.length > 0" class="mt-2">
+            <button class="btn btn-outline-primary btn-sm" (click)="toggle()">
+              {{ !toggleFriends ? "Show Mutual Friends 🔽" : "Hide Mutual Friends 🔼" }}
+              ({{ mutualFriends.length }})
+            </button>
+
+            <div *ngIf="toggleFriends" class="mt-3">
+              <div *ngFor="let mf of mutualFriends" class="d-flex align-items-center mb-2">
+                <img [src]="mf.profilePictureUrl || 'assets/default-avatar.png'" 
+                    class="rounded-circle border me-2" width="40" height="40" />
+                <span class="fw-semibold">{{ mf.username }}</span>
+                <button class="btn btn-sm btn-outline-secondary ms-2" 
+                        (click)="goToMutualFriendProfile(mf.userId)">
+                  <i class="bi bi-person-badge"></i> View Profile
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="posts!=null && posts!=undefined && posts.length>0">
+
+        <h3 class="display-5 mb-3 mt-3 text-center">Posts:</h3>
+        
+        <div class="row row-cols-1 row-cols-md-2 g-3 align-items-start ms-3 mb-3">
+          <div *ngFor="let p of posts" class="col">
+            <div class="card shadow-sm">
+              <div class="text-end text-muted small">{{p.createdAt| date:'dd MMM yyyy, hh:mm a' }}</div>
+              <div class="card-body d-flex flex-column">
+
+                
+                <!-- Post text -->
+                <p class="lead">{{ p.content }}</p>
+      
+                <!-- Post Media (image or video) -->
+                <div *ngIf="p.mediaUrl" class="mb-3 text-center">
+                  <!-- Image -->
+                  <img *ngIf="p.mediaType?.startsWith('image')" 
+                      [src]="p.mediaUrl" 
+                      class="img-fluid rounded shadow-sm" 
+                      alt="Post Image">
+                      
+                      <!-- Video -->
+                      <video *ngIf="p.mediaType?.startsWith('video')" 
+                      [src]="p.mediaUrl" 
+                        class="w-100 rounded shadow-sm" 
+                        controls>
+                  </video>
+                </div>
+                
+                <div class="mt-auto d-flex justify-content-between align-items-center flex-wrap gap-2">
+                  
+                  <!-- Likes -->
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-rounded btn-primary" (click)="toggleLikes(p)">
+                      👍 Likes ({{ p.likedUsers?.length || 0 }})
+                    </button>
+      
+                    <!-- Likes box -->
+                    
+      
+                    <!-- Comments -->
+                    <button class="btn btn-rounded btn-warning" (click)="viewComments(p)">
+                      💬 {{ p.showComments ? 'Hide' : 'View' }} Comments ({{ p.comments?.length || 0 }})
+                    </button>
+                  </div>
+                  
+                  
+                </div>
+                <div *ngIf="p.showLikes" class="likes-box mt-2">
+                      <h6>Liked By</h6>
+                      <ul *ngIf="p.likedUsers?.length > 0; else noLikes">
+                        <li *ngFor="let name of p.likedUsers">{{ name }}</li>
+                      </ul>
+                      <ng-template #noLikes>
+                        <p>No Likes yet</p>
+                      </ng-template>
+                    </div>
+      
+                <!-- Comment List -->
+                <div *ngIf="p.showComments" class="mt-3 border-top pt-2 post-comments">
+                  <div *ngIf="p.comments?.length > 0; else noComments">
+                    <div *ngFor="let c of p.comments" class="mb-1">
+                      <div class="text-end text-muted small">{{c.createdAt | date:'dd MMM yyyy, hh:mm a' }}</div>
+                      <p><b>{{ c.authorName }}:</b> {{ c.text }}</p>
+                    </div>
+                  </div>
+                  <ng-template #noComments>
+                    <p>No Comments yet</p>
+                  </ng-template>
+                </div>
+      
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="text-center mt-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2 text-muted">Loading profile...</p>
+  </div>
+</ng-template>
+
+<ng-template #elseBlock>
+    <div class="alert alert-info shadow-sm text-center mt-4">
+      <i class="bi bi-info-circle"></i> No User profile exists...
+    </div>
+  </ng-template>

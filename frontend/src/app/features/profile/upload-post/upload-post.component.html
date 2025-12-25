@@ -1,0 +1,76 @@
+<div class="post-create-card">
+  <h3>{{ isEdit ? 'Edit Post' : 'Create Post' }}</h3>
+
+  <!-- Media Upload -->
+  <div class="edit-field">
+    <label>Media</label>
+    <input type="file" accept="image/*,video/*" (change)="onMediaSelected($event)">
+    <div *ngIf="mediaPreview" class="media-preview">
+      <!-- Correct preview: image OR video -->
+      <img *ngIf="checkFunction(mediaPreview)" [src]="mediaPreview" alt="Preview">
+      <video *ngIf="!checkFunction(mediaPreview)" [src]="mediaPreview" controls preload="metadata"></video>
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="edit-field">
+    <label>Description</label>
+    <textarea [(ngModel)]="description" rows="3" placeholder="Write something..."></textarea>
+  </div>
+
+  <!-- Privacy Dropdown -->
+  <div class="edit-field">
+    <label>Privacy</label>
+    <select [(ngModel)]="privacy" (change)="onPrivacyChange($event)">
+      <option value="PUBLIC">Public</option>
+      <option value="PRIVATE">Private</option>
+      <option value="FRIENDS">Friends</option>
+      <option value="CUSTOM">Custom</option>
+    </select>
+  </div>
+
+  <div *ngIf="isCustomPrivacy">
+    <div *ngIf="friends!=null && friends!=undefined && friends.length>0; else elseBlock">
+      <h4>Select Friends for the Post</h4>
+      <br>
+      <div *ngFor="let friend of friends" class="card-body mb-2">
+        <img
+          [src]="friend.profilePictureUrl"
+          class="rounded-circle border me-2"
+          width="40"
+          height="40"
+        />
+        {{friend.username}} ({{friend.email}})
+        <input type="checkbox" class="ms-2 form-check-inline" [(ngModel)]="friend.selected">
+      </div>
+    </div>
+  </div>
+    
+  <!-- Buttons -->
+  <div class="actions">
+    <button class="btn-save" (click)="savePost()">{{ isEdit ? 'Update Post' : 'Post' }}</button>
+    <button class="btn-cancel" (click)="cancelPost()">Cancel</button>
+  </div>
+</div>
+
+<!-- Bootstrap Toast -->
+<div class="toast-container position-fixed top-0 end-0 p-3" *ngIf="showToast">
+  <div class="toast align-items-center border-0 show"
+       [ngClass]="{
+         'text-bg-success': toastType === 'success',
+         'text-bg-danger': toastType === 'error',
+         'text-bg-info': toastType === 'info'
+       }">
+    <div class="d-flex">
+      <div class="toast-body">{{ toastMessage }}</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto"
+              (click)="showToast = false"></button>
+    </div>
+  </div>
+</div>
+
+<ng-template #elseBlock>
+  <div class="text-muted">
+    No friends found....
+  </div>
+</ng-template>

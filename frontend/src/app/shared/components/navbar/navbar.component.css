@@ -1,0 +1,92 @@
+.navbar {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.1rem;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+    background: linear-gradient(90deg, #3b5998, #4c70ba);
+    padding: 0.6rem 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Brand */
+.navbar-brand {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-right: 2rem;
+    transition: color 0.3s ease;
+}
+.navbar-brand:hover {
+    color: #dfe6f2 !important;
+}
+
+/* Nav links */
+.nav-link {
+    padding: 0.7rem 1.2rem;
+    color: white !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    position: relative;
+    transition: all 0.3s ease;
+}
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+}
+
+/* Active link style */
+.nav-link.active {
+    color: #ffdd57 !important;
+    font-weight: 700;
+}
+.nav-link.active::after {
+    content: '';
+    display: block;
+    height: 3px;
+    background-color: #ffdd57;
+    width: 100%;
+    margin-top: 4px;
+    border-radius: 2px;
+    animation: slideIn 0.3s ease forwards;
+}
+@keyframes slideIn {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+/* Logout button - modern pill style */
+.btn-logout {
+    background: linear-gradient(135deg, #e63946, #c92a2a);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 0.5rem 1.4rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(233, 69, 96, 0.3);
+}
+.btn-logout:hover {
+    background: linear-gradient(135deg, #c92a2a, #a4161a);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(233, 69, 96, 0.45);
+}
+.btn-logout:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 6px rgba(233, 69, 96, 0.4);
+}
+
+/* Toggler for mobile */
+.navbar-toggler {
+  border: none;
+  outline: none;
+}
+.navbar-toggler-icon {
+  filter: invert(1); /* makes hamburger white */
+}
+.badge{
+    font-size: 0.7rem;
+    padding: 0.35em 0.5em;
+}

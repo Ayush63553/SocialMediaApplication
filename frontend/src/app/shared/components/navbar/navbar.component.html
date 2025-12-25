@@ -1,0 +1,61 @@
+<nav class="navbar navbar-expand-lg navbar-light"> 
+  <!-- Branding -->
+  <a class="navbar-brand text-white" [routerLink]="['/home']" routerLinkActive="active">Connecto</a>
+
+  <!-- Hamburger button -->
+  <button 
+    class="navbar-toggler" 
+    type="button" 
+    data-bs-toggle="collapse" 
+    data-bs-target="#navbarNav"
+    aria-controls="navbarNav"
+    aria-expanded="false"
+    aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Navbar links (collapsible) -->
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="navbar-nav ms-auto" *ngIf="isLoggedIn; else elseBlock">
+      <a class="nav-item nav-link" [routerLink]="['/profile']" routerLinkActive="active">Profile</a>  
+      <a class="nav-item nav-link" [routerLink]="['/friends']" routerLinkActive="active">Friends</a>  
+      
+      <!-- Notifications with badge -->
+      <a class="nav-item nav-link position-relative" [routerLink]="['/notifications']" routerLinkActive="active">
+        <i class="bi bi-bell"></i> Notifications
+        <span *ngIf="unreadCount > 0" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+          {{ unreadCount }}
+        </span>
+      </a>  
+
+      <button class="btn-logout mt-2 mt-lg-0" (click)="LogOut()">Logout</button>  
+    </div> 
+  </div>
+</nav>    
+
+<!-- If not logged in -->
+<ng-template #elseBlock>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="navbar-nav ms-auto">
+      <a class="nav-item nav-link" [routerLink]="['/auth']" routerLinkActive="active">Login</a>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Bootstrap Toast -->
+<div 
+  class="toast-container position-fixed top-0 end-0 p-3" 
+  *ngIf="showLogoutToast">
+  <div class="toast align-items-center text-bg-success border-0 show">
+    <div class="d-flex">
+      <div class="toast-body">
+        ✅ Logged out successfully
+      </div>
+      <button 
+        type="button" 
+        class="btn-close btn-close-white me-2 m-auto" 
+        (click)="showLogoutToast = false">
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<div class="container mt-4">
+  <h3>Notifications</h3>
+
+  <div *ngIf="loading" class="text-muted">Loading...</div>
+
+  <ul *ngIf="!loading && notifications.length > 0" class="list-group shadow-sm">
+    <li *ngFor="let note of notifications" class="list-group-item">
+      <i class="bi bi-bell-fill text-primary me-2"></i>
+      {{ note }}
+    </li>
+  </ul>
+
+  <p *ngIf="!loading && notifications.length === 0" class="text-muted">
+    No new notifications.
+  </p>
+</div>

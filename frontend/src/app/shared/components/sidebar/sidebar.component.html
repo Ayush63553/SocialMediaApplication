@@ -1,0 +1,71 @@
+<div class="sidebar-container p-3 shadow-sm rounded">
+  <h5 class="mb-4 text-primary fw-bold border-bottom pb-2">
+    <i class="bi bi-people-fill me-2"></i> Friends
+  </h5>
+
+  <ul class="list-group list-unstyled">
+
+    <!-- Find Friends -->
+    <li
+      class="list-group-item list-group-item-action mb-2 border-0 d-flex align-items-center"
+      routerLink="/friends/find"
+      routerLinkActive="active"
+    >
+      <i class="bi bi-person-plus me-2 text-secondary"></i>
+      <span>Find Friends</span>
+    </li>
+
+    <!-- Friend Requests with submenu -->
+    <li class="list-group-item list-group-item-action mb-2 border-0">
+      <div 
+        (click)="toggleRequests()" 
+        class="d-flex justify-content-between align-items-center px-2 py-2 cursor-pointer"
+      >
+        <div class="d-flex align-items-center">
+          <i class="bi bi-person-check me-2 text-secondary"></i>
+          <span>Friend Requests</span>
+        </div>
+        <i [class.rotate]="requestsExpanded" class="bi bi-chevron-down ms-auto"></i>
+      </div>
+
+      <!-- Submenu -->
+      <ul *ngIf="requestsExpanded" class="list-group submenu mt-2 ps-3">
+        <li 
+          class="list-group-item py-2 border-0 submenu-item"
+          routerLink="/friends/requests/received"
+          routerLinkActive="active"
+        >
+          <i class="bi bi-inbox-arrow-down me-2 text-muted"></i> Received
+        </li>
+        <li 
+          class="list-group-item py-2 border-0 submenu-item"
+          routerLink="/friends/requests/sent"
+          routerLinkActive="active"
+        >
+          <i class="bi bi-send-check me-2 text-muted"></i> Sent
+        </li>
+      </ul>
+    </li>
+
+    <!-- All Friends -->
+    <li
+      class="list-group-item list-group-item-action mb-2 border-0 d-flex align-items-center"
+      routerLink="/friends/list"
+      routerLinkActive="active"
+    >
+      <i class="bi bi-people me-2 text-secondary"></i>
+      <span>All Friends</span>
+    </li>
+    
+    <li
+      class="list-group-item list-group-item-action mb-2 border-0 d-flex align-items-center btn-danger"
+      routerLink="/friends/blockList"
+      routerLinkActive="active"
+    >
+      <i class="bi bi-ban me-2 text-danger"></i>
+      <span class='text-danger'>Block List</span>
+    </li>
+
+    
+  </ul>
+</div>

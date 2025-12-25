@@ -1,0 +1,244 @@
+<div class="container my-4">
+  <div class="row">
+    <!-- If new user (no posts + no friends) -->
+    <div class="col-md-12" *ngIf="isNewUser">
+      <div class="card text-center shadow-sm p-4">
+        <h4>Welcome, {{ loggedInUsername }} 🎉</h4>
+        <p class="text-muted">You don’t have any posts or friends yet. Start by finding people you may know!</p>
+      </div>
+    </div>
+
+    <!-- Feed (posts) -->
+    <div class="col-md-8" *ngIf="!isNewUser">
+      <ng-container *ngFor="let post of posts">
+        <div class="card shadow-sm rounded-3 mb-4">
+          <div class="card-body">
+            <!-- Post Header -->
+            <div class="d-flex align-items-center mb-2">
+              <img [src]="post.profilePictureUrl || 'assets/images/default-avatar.png'"
+                   class="rounded-circle me-2" style="width: 3rem; height: 3rem;">
+              <div>
+                <h6 class="mb-0"><strong>{{ post.username }}</strong></h6>
+                <small class="text-muted">{{ post.createdAt | date:'dd MMM yyyy, hh:mm a' }}</small>
+              </div>
+            </div>
+
+            <!-- Post content -->
+            <p>{{ post.content }}</p>
+
+            <!-- Post Media -->
+            <div *ngIf="post.mediaUrl" class="mb-3">
+              <img *ngIf="post.mediaType?.startsWith('image')" [src]="post.mediaUrl"
+                   class="img-fluid rounded shadow-sm">
+              <video *ngIf="post.mediaType?.startsWith('video')" [src]="post.mediaUrl"
+                     class="w-100 rounded shadow-sm" controls></video>
+            </div>
+
+            <!-- Reaction summary -->
+            <div class="d-flex justify-content-between align-items-center mt-2">
+              <div>
+                <i class="bi bi-hand-thumbs-up-fill text-primary me-1"></i>
+                <span class="small">{{ post.likeCount || 0 }}</span>
+              </div>
+              <div>
+                <span class="small text-muted">{{ commentsMap[post.postId].length || 0 }} comments</span>
+              </div>
+            </div>
+
+            <hr>
+
+            <!-- Action buttons -->
+            <div class="d-flex justify-content-around text-muted">
+              <button class="btn btn-light btn-sm w-100 me-1" (click)="toggleLike(post)">
+                <i class="bi"
+                   [ngClass]="post.likedByUsers.includes(loggedInUsername)
+                                ? 'bi-hand-thumbs-up-fill text-primary'
+                                : 'bi-hand-thumbs-up'"></i>
+                {{ post.likedByUsers.includes(loggedInUsername) ? 'Liked' : 'Like' }}
+              </button>
+
+              <button class="btn btn-light btn-sm w-100 me-1" (click)="dislikePost(post)">
+                <i class="bi bi-hand-thumbs-down"></i> Dislike
+              </button>
+
+              <button class="btn btn-light btn-sm w-100" (click)="toggleComments(post)">
+                <i class="bi bi-chat-dots"></i> Comments
+              </button>
+            </div>
+
+            <!-- Comments section -->
+            <div *ngIf="showCommentsMap[post.postId]" class="mt-3">
+              <!-- Add comment -->
+              <div class="input-group mb-3">
+                <textarea class="form-control me-2"
+                          [(ngModel)]="newCommentText[post.postId]"
+                          rows="1"
+                          placeholder="Write a comment..."></textarea>
+                <button class="btn btn-primary" (click)="addComment(post)">
+                  <i class="bi bi-send"></i>
+                </button>
+              </div>
+
+              <!-- Existing comments -->
+              <div *ngFor="let comment of commentsMap[post.postId]" class="d-flex align-items-start mb-2">
+                <img [src]="comment.profilePictureUrl || 'assets/images/default-avatar.png'"
+                     class="rounded-circle me-2" style="width:30px; height:30px;">
+                <div class="bg-light rounded p-2 w-100">
+                  <div class="d-flex justify-content-between">
+                    <strong>{{ comment.username }}</strong>
+                    <div>
+                      <small class="text-muted">{{ comment.createdAt | date:'dd MMM yyyy, hh:mm a' }}</small>
+                      <button *ngIf="canDeleteComment(post, comment)"
+                              class="btn btn-sm btn-link text-danger"
+                              (click)="deleteComment(post, comment)">
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                  <div>{{ comment.content }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Right sidebar -->
+    <div class="col-md-4" *ngIf="!isNewUser">
+      <!-- Friends List -->
+      <div class="card mb-3 shadow-sm">
+        <div class="card-header bg-primary text-white"><strong>Your Friends</strong></div>
+        <ul class="list-group list-group-flush">
+          <li *ngFor="let friend of friends" class="list-group-item">
+            <div class="d-flex align-items-center justify-content-between">            
+            <div class="d-flex align-items-center">
+              <img [src]="friend.profilePictureUrl || 'assets/images/default-avatar.png'"
+              class="rounded-circle me-2" style="width:30px; height:30px;">
+              <span>{{ friend.username }}</span>
+            </div>
+            <span>
+
+              <button class="btn btn-sm btn-outline-primary" (click)="viewProfile(friend)">
+                <i class="bi bi-person"></i> View
+              </button>
+            </span>
+            </div>
+            <!-- Mutual Friends Section -->
+      <div
+        class="card-footer bg-light border-0"
+        *ngIf="mutualFriendsMap[friend.userId] && mutualFriendsMap[friend.userId].length > 0"
+      >
+        <small
+          class="text-primary fw-semibold cursor-pointer"
+          (click)="toggleDropdown(friend.userId)"
+        >
+          {{ expanded[friend.userId] ? 'Hide Mutual Friends 🔼' : 'Show Mutual Friends 🔽' }}
+          <span class="badge bg-secondary ms-1">
+            {{ mutualFriendsMap[friend.userId].length }}
+          </span>
+        </small>
+
+        <!-- Expanded Mutual Friends List -->
+        <ul *ngIf="expanded[friend.userId]" class="list-group list-group-flush mt-3">
+          <li *ngFor="let mf of mutualFriendsMap[friend.userId]" class="list-group-item d-flex align-items-center">
+            <img
+              [src]="mf.profilePictureUrl || 'assets/default-avatar.png'"
+              class="rounded-circle border me-3"
+              width="40"
+              height="40"
+            />
+            <span class="fw-semibold">{{ mf.username }}</span>
+            <button
+              class="btn btn-sm btn-outline-secondary ms-auto"
+              (click)="viewProfile(mf)"
+            >
+              View Profile
+            </button>
+          </li>
+        </ul>
+      </div>
+          </li>
+          <li *ngIf="friends.length === 0" class="list-group-item text-muted">No friends yet</li>
+        </ul>
+      </div>
+
+      <!-- Suggestions -->
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white"><strong>People You May Know</strong></div>
+        <ul class="list-group list-group-flush">
+          <li *ngFor="let user of suggestions" class="list-group-item">
+            <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+              <img [src]="user.profilePictureUrl || 'assets/images/default-avatar.png'"
+                   class="rounded-circle me-2" style="width:30px; height:30px;">
+              <span>{{ user.username }}</span>
+            </div>
+            <span>
+
+              <button class="btn btn-sm btn-outline-primary me-2" (click)="viewProfile(user)">
+                <i class="bi bi-person"></i> View
+              </button>
+              <button class="btn btn-sm btn-outline-primary"
+              (click)="sendFriendRequest(user.userId)">
+              Add Friend
+            </button>
+          </span>
+        </div>
+          <!-- Mutual Friends Section -->
+
+      <div
+        class="card-footer bg-light border-0"
+        *ngIf="mutualFriendsMap[user.userId] && mutualFriendsMap[user.userId].length > 0"
+      >
+        <small
+          class="text-primary fw-semibold cursor-pointer"
+          (click)="toggleDropdown(user.userId)"
+        >
+          {{ expanded[user.userId] ? 'Hide Mutual Friends 🔼' : 'Show Mutual Friends 🔽' }}
+          <span class="badge bg-secondary ms-1">
+            {{ mutualFriendsMap[user.userId].length }}
+          </span>
+        </small>
+
+        <!-- Expanded Mutual Friends List -->
+        <ul *ngIf="expanded[user.userId]" class="list-group list-group-flush mt-3">
+          <li *ngFor="let mf of mutualFriendsMap[user.userId]" class="list-group-item d-flex align-items-center">
+            <img
+              [src]="mf.profilePictureUrl || 'assets/default-avatar.png'"
+              class="rounded-circle border me-3"
+              width="40"
+              height="40"
+            />
+            <span class="fw-semibold">{{ mf.username }}</span>
+            <button
+              class="btn btn-sm btn-outline-secondary ms-auto"
+              (click)="viewProfile(mf)"
+            >
+              View Profile
+            </button>
+          </li>
+        </ul>
+      </div>
+          </li>
+          <li *ngIf="suggestions.length === 0" class="list-group-item text-muted">No suggestions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Toast -->
+<div class="toast-container position-fixed top-0 end-0 p-3" *ngIf="showToast">
+  <div class="toast align-items-center border-0 show"
+       [ngClass]="{
+         'text-bg-success': toastType === 'success',
+         'text-bg-danger': toastType === 'error',
+         'text-bg-info': toastType === 'info'
+       }">
+    <div class="d-flex">
+      <div class="toast-body">{{ toastMessage }}</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto"
+              (click)="showToast = false"></button>
+    </div>
+  </div>
+</div>

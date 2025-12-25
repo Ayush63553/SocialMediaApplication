@@ -1,0 +1,36 @@
+/* Card styling */
+.request-card {
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.request-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Avatar */
+img {
+  object-fit: cover;
+}
+
+/* Buttons */
+button.btn {
+  border-radius: 20px;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+button.btn:hover {
+  transform: scale(1.05);
+}
+
+/* Mutual friends list */
+.list-group-item {
+  background-color: #f9fafb;
+  border-radius: 8px;
+}
+
+.list-group-item:hover {
+  background-color: #eef3f7;
+}

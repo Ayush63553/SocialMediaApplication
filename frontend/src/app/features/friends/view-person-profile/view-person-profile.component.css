@@ -1,0 +1,23 @@
+.profile-card {
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+img {
+  object-fit: cover;
+}
+
+button.btn {
+  border-radius: 20px;
+  transition: all 0.2s ease-in-out;
+}
+
+button.btn:hover {
+  transform: scale(1.05);
+}
+

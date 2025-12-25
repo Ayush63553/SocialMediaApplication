@@ -1,0 +1,232 @@
+.outer-box {
+    background: linear-gradient(135deg, #f0f2f5, #dfe9f3);
+    min-height: 100vh;
+    padding-top: 20px;
+    box-sizing: border-box;
+}
+
+/* Main container for branding + form */
+.register-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 60px;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Branding (left side) */
+.branding-section {
+    flex: 1;
+    margin-right: 50px;
+}
+
+.branding-section h1 {
+    color: #1877f2;
+    font-size: 64px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    letter-spacing: -1px;
+}
+
+.branding-section h5 {
+    color: #444;
+    font-size: 20px;
+    font-weight: 400;
+    margin-top: 0;
+}
+
+/* Register card (right side) */
+.register-form-card {
+    flex: 1;
+    max-width: 420px;
+    background-color: #fff;
+    padding: 22px 18px;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.register-form-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.15);
+}
+
+.register-form-card h3 {
+    color: #1c1e21;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.register-form-card hr {
+    border: 0;
+    border-top: 1px solid #dadde1;
+    margin: 12px 0 18px 0;
+}
+
+/* Inputs & fields */
+.name-fields {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.name-fields input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #dddfe2;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.register-form input,
+.register-form select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    border: 1px solid #dddfe2;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.register-form input:focus,
+.register-form select:focus {
+    outline: none;
+    border-color: #1877f2;
+    box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.2);
+}
+
+/* Date of Birth & Gender */
+.dob-section,
+.gender-section {
+    text-align: left;
+    margin-bottom: 14px;
+}
+
+.dob-section label,
+.gender-section label {
+    display: block;
+    font-size: 12px;
+    color: #606770;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.dob-selectors {
+    display: flex;
+    gap: 8px;
+}
+
+.dob-selectors select {
+    flex: 1;
+    padding: 8px;
+    font-size: 13px;
+}
+
+/* Gender as toggle buttons */
+.gender-options {
+    display: flex;
+    gap: 10px;
+}
+
+.gender-options input[type="radio"] {
+    display: none; /* hide default radio */
+}
+
+.gender-options label {
+    flex: 1;
+    border: 1px solid #dddfe2;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 14px;
+    color: #1c1e21;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.gender-options label:hover {
+    background-color: #f0f2f5;
+    border-color: #1877f2;
+}
+
+.gender-options input[type="radio"]:checked + label {
+    background-color: #1877f2;
+    color: white;
+    border-color: #1877f2;
+    font-weight: bold;
+}
+
+/* Buttons */
+.sign-up-btn {
+    background-color: #42b72a;
+    color: white;
+    width: 65%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.sign-up-btn:hover {
+    background-color: #36a420;
+    transform: translateY(-2px);
+}
+
+.back-to-login {
+    display: inline-block;
+    margin-top: 10px;
+    color: #1877f2;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.back-to-login:hover {
+    text-decoration: underline;
+}
+
+.form-group {
+ margin-bottom: 12px;
+}
+.text-danger {
+ font-size: 0.8rem;
+ margin-top: 2px;
+ display: block;
+}
+.sign-up-btn[disabled] {
+ background: #ccc;
+ cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .register-container {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .branding-section {
+        text-align: center;
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .branding-section h1 {
+        font-size: 48px;
+    }
+
+    .register-form-card {
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+    }
+}

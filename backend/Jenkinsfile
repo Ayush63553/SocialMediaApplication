@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Backend - Build & Test') {
+            steps {
+                echo 'Starting Maven build and running tests...'
+                bat 'mvn clean verify'
+            }
+        }
+
+      //  stage('Backend - SonarQube Analysis') {
+     //       steps {
+      //          echo 'Performing SonarQube static code analysis...'
+      //          bat 'mvn sonar:sonar'
+     //      }
+     //  }
+
+      //  stage('Backend - Deploy to Artifactory') {
+       //     steps {
+       //         echo 'Deploying backend artifacts to Artifactory...'
+        //        bat 'mvn deploy'
+        //    }
+       // }
+
+        stage('Frontend - Build') {
+            steps {
+                echo 'Triggering  frontend build via Jenkins job...'
+                build job: 'Frontend-Facebook', wait: true
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'All stages completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Please check the logs for details.'
+        }
+    }
+}

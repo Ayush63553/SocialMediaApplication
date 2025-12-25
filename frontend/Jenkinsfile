@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+    
+    environment {
+        NODE_ENV = 'development'
+        NG_CLI_ANALYTICS = 'false'
+        CI='false'
+    }
+    
+    stages {  
+        stage('Install') {
+            steps {
+                echo 'Installing dependencies...'               
+                bat 'npm install --force'
+            }
+        }         
+        
+        stage('Frontend -Build') {
+            steps {
+                echo 'Building for development...'
+                bat 'ng build facebook_frontend_group3 --configuration=development'
+            }
+        }           
+    }
+    
+    post {        
+        success {
+            echo 'All stages passed! Ready for deployment.'
+        }
+        failure {
+            echo ' Pipeline failed. Check logs for issues.'           
+        }
+    }
+}
